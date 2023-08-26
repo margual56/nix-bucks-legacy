@@ -4,7 +4,7 @@ A simple budgeting app
 ![Screenshot_20230826_151748](https://github.com/margual56/budgeting/assets/30444886/f06d494f-0f9e-45f9-8170-3289ecb31c86)
 
 # Install
-- Running the pre-compiled binary: Go to [the releases page]() and download the appropriate version for you.
+- Running the pre-compiled binary: Go to [the releases page](https://github.com/margual56/budgeting/releases/latest) and download the appropriate version for you.
 - With cargo: `cargo install https://github.com/margual56/budgeting.git`.
 - Clone and compile yourself: `git clone https://github.com/margual56/budgeting.git`, cd into the folder and `cargo build --release`.
 
