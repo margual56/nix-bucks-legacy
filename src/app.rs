@@ -169,6 +169,20 @@ impl App {
         amount
     }
 
+    fn monthly_balance(&self) -> f32 {
+        let mut amount = 0.0;
+
+        for income in self.incomes.values() {
+            amount += income.cost_per_month();
+        }
+
+        for subscription in self.subscriptions.values() {
+            amount -= subscription.cost();
+        }
+
+        amount
+    }
+
     fn draw_windows(&mut self, ctx: &egui::Context) {
         if let Some(win) = self.new_subscription_window.as_mut() {
             let mut show = true;
@@ -234,7 +248,7 @@ impl App {
                 egui::ScrollArea::both()
                     .id_source("Subscriptions scroll area")
                     .auto_shrink([true, true])
-                    .max_height(200.0)
+                    .max_height(ui.available_height() - 35.0)
                     .show(ui, |ui| {
                         TableBuilder::new(ui)
                             .striped(true)
@@ -386,7 +400,6 @@ impl App {
             ui.horizontal(|ui| {
                 ui.push_id("results", |ui| {
                     TableBuilder::new(ui)
-                        .striped(false)
                         .cell_layout(egui::Layout::left_to_right(egui::Align::Center))
                         .auto_shrink([true, true])
                         .column(Column::remainder().at_least(150.0).at_most(300.0))
@@ -395,6 +408,24 @@ impl App {
                         .column(Column::remainder().at_least(200.0))
                         .header(20.0, |mut _header| {})
                         .body(|mut body| {
+                            body.row(20.0, |mut row| {
+                                row.col(|ui| {
+                                    ui.spacing();
+                                });
+                                row.col(|ui| {
+                                    ui.label(RichText::new("Total (average) cost per month:"));
+                                });
+                                row.col(|ui| {
+                                    ui.label(
+                                        RichText::new(format!("{:+.2}€", self.monthly_costs()))
+                                            .color(Color32::RED),
+                                    );
+                                });
+                                row.col(|ui| {
+                                    ui.spacing();
+                                });
+                            });
+
                             body.row(20.0, |mut row| {
                                 row.col(|ui| {
                                     ui.spacing();
@@ -408,37 +439,20 @@ impl App {
                                 row.col(|ui| {
                                     ui.label(
                                         RichText::new(format!(
-                                            "-{:.2}€",
+                                            "{:+.2}€",
                                             cost_to_year_end(
                                                 self.subscriptions.clone().into_values().collect(),
                                                 self.fixed_expenses.clone().into_values().collect()
                                             )
                                         ))
-                                        .color(ui.visuals().error_fg_color),
+                                        .color(Color32::RED),
                                     );
                                 });
                                 row.col(|ui| {
                                     ui.spacing();
                                 });
                             });
-                            body.row(20.0, |mut row| {
-                                row.col(|ui| {
-                                    ui.spacing();
-                                });
-                                row.col(|ui| {
-                                    ui.label(RichText::new("Total (average) cost per month:"));
-                                });
-                                row.col(|ui| {
-                                    ui.label(
-                                        RichText::new(format!("-{:.2}€", self.monthly_costs()))
-                                            .color(Color32::RED),
-                                    );
-                                });
-                                row.col(|ui| {
-                                    ui.spacing();
-                                });
-                            });
-
+                           
                             body.row(20.0, |mut row| {
                                 row.col(|ui| {
                                     ui.spacing();
@@ -507,6 +521,34 @@ impl App {
                                             self.subscriptions.clone().into_values().collect(),
                                             self.fixed_expenses.clone().into_values().collect(),
                                         );
+
+                                    ui.label(
+                                        RichText::new(format!("{:+.2}€", balance))
+                                            .color(if balance < 0.0 {
+                                                Color32::RED
+                                            } else {
+                                                Color32::GREEN
+                                            })
+                                            .strong(),
+                                    );
+                                });
+                                row.col(|ui| {
+                                    ui.spacing();
+                                });
+                            });
+                            body.row(20.0, |mut row| {
+                                row.col(|ui| {
+                                    ui.spacing();
+                                });
+                                row.col(|ui| {
+                                    ui.label(
+                                        RichText::new("Total monthly balance:")
+                                            .strong(),
+                                    );
+                                });
+
+                                row.col(|ui| {
+                                    let balance = self.monthly_balance();
 
                                     ui.label(
                                         RichText::new(format!("{:+.2}€", balance))
@@ -706,39 +748,39 @@ impl eframe::App for App {
                 ui.vertical_centered_justified(|ui| {
                     ui.collapsing(RichText::new("Expenses").heading(), |ui| {
                         ui.horizontal(|ui| {
-                            TableBuilder::new(ui)
-                                .auto_shrink([false, true])
-                                .vscroll(false)
-                                .column(
-                                    Column::remainder()
-                                        .at_least(400.0)
-                                        .at_most(450.0)
-                                        .clip(true)
-                                        .resizable(false),
-                                )
-                                .column(Column::auto().at_least(25.0))
-                                .column(
-                                    Column::remainder()
-                                        .at_least(400.0)
-                                        .at_most(450.0)
-                                        .clip(true)
-                                        .resizable(false),
-                                )
-                                .body(|mut body| {
-                                    body.row(200.0, |mut row| {
-                                        row.col(|ui| {
-                                            self.subscriptions_table(ui);
-                                        });
+                            egui::ScrollArea::horizontal().show(ui, |ui| {
+                                TableBuilder::new(ui)
+                                    .auto_shrink([false, true])
+                                    .vscroll(false)
+                                    .column(
+                                        Column::auto()
+                                            .at_least(450.0)
+                                            .clip(true)
+                                            .resizable(false),
+                                    )
+                                    .column(Column::auto().at_least(25.0).resizable(false))
+                                    .column(
+                                        Column::auto()
+                                            .at_least(450.0)
+                                            .clip(true)
+                                            .resizable(false),
+                                    )
+                                    .body(|mut body| {
+                                        body.row(200.0, |mut row| {
+                                            row.col(|ui| {
+                                                self.subscriptions_table(ui);
+                                            });
 
-                                        row.col(|ui| {
-                                            ui.spacing();
-                                        });
+                                            row.col(|ui| {
+                                                ui.spacing();
+                                            });
 
-                                        row.col(|ui| {
-                                            self.expenses_table(ui);
-                                        });
-                                    })
-                                });
+                                            row.col(|ui| {
+                                                self.expenses_table(ui);
+                                            });
+                                        })
+                                    });
+                            });
                         });
                     });
 
@@ -746,39 +788,39 @@ impl eframe::App for App {
 
                     ui.collapsing(RichText::new("Income").heading(), |ui| {
                         ui.horizontal(|ui| {
-                            TableBuilder::new(ui)
-                                .vscroll(false)
-                                .auto_shrink([false, true])
-                                .column(
-                                    Column::remainder()
-                                        .at_least(400.0)
-                                        .at_most(450.0)
-                                        .clip(true)
-                                        .resizable(false),
-                                )
-                                .column(Column::auto().at_least(25.0))
-                                .column(
-                                    Column::remainder()
-                                        .at_least(400.0)
-                                        .at_most(450.0)
-                                        .clip(true)
-                                        .resizable(false),
-                                )
-                                .body(|mut body| {
-                                    body.row(200.0, |mut row| {
-                                        row.col(|ui| {
-                                            self.income_table(ui);
-                                        });
+                            egui::ScrollArea::horizontal().show(ui, |ui| {
+                                TableBuilder::new(ui)
+                                    .vscroll(false)
+                                    .auto_shrink([false, true])
+                                    .column(
+                                        Column::auto()
+                                            .at_least(450.0)
+                                            .clip(true)
+                                            .resizable(false),
+                                    )
+                                    .column(Column::auto().at_least(25.0))
+                                    .column(
+                                        Column::auto()
+                                            .at_least(450.0)
+                                            .clip(true)
+                                            .resizable(false),
+                                    )
+                                    .body(|mut body| {
+                                        body.row(200.0, |mut row| {
+                                            row.col(|ui| {
+                                                self.income_table(ui);
+                                            });
 
-                                        row.col(|ui| {
-                                            ui.spacing();
-                                        });
+                                            row.col(|ui| {
+                                                ui.spacing();
+                                            });
 
-                                        row.col(|ui| {
-                                            self.punctual_income_table(ui);
+                                            row.col(|ui| {
+                                                self.punctual_income_table(ui);
+                                            });
                                         });
                                     });
-                                });
+                            });
                         });
                     });
 
