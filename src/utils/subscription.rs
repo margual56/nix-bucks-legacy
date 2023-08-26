@@ -1,12 +1,16 @@
+use std::hash::Hash;
+
+use chrono::{NaiveDate, Utc};
+use ordered_float::OrderedFloat;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use super::{Recurrence, SimpleRecurrence};
+use super::{times_until, Recurrence, SimpleRecurrence};
 
 #[derive(Clone)]
 pub struct TmpSubscription {
     pub name: String,
-    pub cost: f64,
+    pub cost: f32,
     pub recurrence: SimpleRecurrence,
     pub days: u8,
     pub months: u8,
@@ -36,21 +40,20 @@ impl Into<Subscription> for TmpSubscription {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
 pub struct Subscription {
-    #[serde(with = "uuid::serde::compact")]
     uuid: Uuid,
     name: String,
-    cost: f64,
+    cost: OrderedFloat<f32>,
     recurrence: Recurrence,
 }
 
 impl Subscription {
-    pub fn new(name: String, cost: f64, recurrence: Recurrence) -> Self {
+    pub fn new(name: String, cost: f32, recurrence: Recurrence) -> Self {
         Self {
             uuid: Uuid::new_v4(),
             name,
-            cost,
+            cost: OrderedFloat(cost),
             recurrence,
         }
     }
@@ -63,11 +66,37 @@ impl Subscription {
         &self.name
     }
 
-    pub fn cost(&self) -> f64 {
-        self.cost
+    pub fn cost(&self) -> f32 {
+        self.cost.0
     }
 
     pub fn recurrence(&self) -> Recurrence {
         self.recurrence
+    }
+
+    pub fn cost_until(&self, datetime: NaiveDate) -> f32 {
+        let times = times_until(self.recurrence, Utc::now().naive_utc().date(), datetime);
+
+        self.cost.0 * times as f32
+    }
+
+    pub fn cost_per_year(&self) -> f32 {
+        let times = match self.recurrence {
+            Recurrence::Day(each_days) => 365 / each_days as u32,
+            Recurrence::Month(_, each_months) => 12 / each_months as u32,
+            Recurrence::Year(_, _, each_years) => 1 / each_years as u32,
+        };
+
+        self.cost.0 * times as f32
+    }
+
+    pub fn cost_per_month(&self) -> f32 {
+        let times = match self.recurrence {
+            Recurrence::Day(each_days) => 30 / each_days as u32,
+            Recurrence::Month(_, each_months) => 1 / each_months as u32,
+            Recurrence::Year(_, _, each_years) => 1 / (each_years * 12) as u32,
+        };
+
+        self.cost.0 * times as f32
     }
 }

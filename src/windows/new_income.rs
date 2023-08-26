@@ -1,16 +1,16 @@
 use eframe::egui;
 
-use crate::{Subscription, TmpSubscription, SimpleRecurrence};
+use crate::{SimpleRecurrence, Subscription, TmpSubscription};
 
-#[derive(Default)]
-pub struct NewSubscriptionWindow {
+#[derive(Default, Clone)]
+pub struct NewIncomeWindow {
     tmp_subscription: TmpSubscription,
 }
 
-impl NewSubscriptionWindow {
+impl NewIncomeWindow {
     pub fn show(&mut self, ctx: &egui::Context, show: &mut bool) -> Option<Subscription> {
         let mut subs: Option<Subscription> = None;
-        egui::Window::new("New subscription")
+        egui::Window::new("New income source")
             .open(show)
             .auto_sized()
             .default_size(&[600.0, 200.0])
@@ -30,7 +30,8 @@ impl NewSubscriptionWindow {
                                 egui::DragValue::new(&mut self.tmp_subscription.cost)
                                     .speed(0.01)
                                     .max_decimals(2)
-                                    .min_decimals(2),
+                                    .min_decimals(2)
+                                    .suffix(" €"),
                             );
                         });
 

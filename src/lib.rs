@@ -1,7 +1,9 @@
 mod app;
 mod utils;
-mod new_subscription;
+mod windows;
 
 pub use app::App;
-pub use new_subscription::NewSubscriptionWindow;
-pub use utils::{SimpleRecurrence, Recurrence, TmpSubscription, Subscription, FixedExpense};
+pub use utils::{FixedExpense, Recurrence, SimpleRecurrence, Subscription, TmpSubscription};
+pub use windows::{
+    NewExpenseWindow, NewIncomeWindow, NewPunctualIncomeWindow, NewSubscriptionWindow,
+};

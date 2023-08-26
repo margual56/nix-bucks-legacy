@@ -4,7 +4,10 @@ use budgeting::App;
 
 fn main() {
     let options = eframe::NativeOptions {
-        initial_window_size: Some(egui::vec2(600.0, 500.0)),
+        initial_window_size: Some(egui::vec2(1000.0, 800.0)),
+        resizable: false,
+        follow_system_theme: true,
+        hardware_acceleration: eframe::HardwareAcceleration::Preferred,
         ..Default::default()
     };
 
