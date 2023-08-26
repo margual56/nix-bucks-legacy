@@ -2,6 +2,11 @@
 name = "budgeting"
 version = "0.1.1"
 edition = "2021"
+authors = ["Marcos Gutiérrez Alonso <marcos56@mailbox.org>"]
+description = "A simple budgeting app"
+license = "GPL-3.0-or-later"
+repository = "https://github.com/margual56/budgeting"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
