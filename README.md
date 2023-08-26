@@ -1,7 +1,8 @@
 # Budgeting
 A simple budgeting app
 
-![Screenshot_20230826_151748](https://github.com/margual56/budgeting/assets/30444886/f06d494f-0f9e-45f9-8170-3289ecb31c86)
+![Demo](https://github.com/margual56/budgeting/assets/30444886/74378021-9cb7-4e22-9ea5-c512e6077c5c)
+
 
 # Install
 - Running the pre-compiled binary: Go to [the releases page](https://github.com/margual56/budgeting/releases/latest) and download the appropriate version for you.
