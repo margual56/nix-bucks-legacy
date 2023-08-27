@@ -1,5 +1,6 @@
 use cached::proc_macro::cached;
 use chrono::{Datelike, Days, Months, NaiveDate};
+use internationalization::t;
 
 use core::fmt::Display;
 use serde::{Deserialize, Serialize};
@@ -31,6 +32,16 @@ pub enum SimpleRecurrence {
     Year,
 }
 
+impl SimpleRecurrence {
+    pub fn to_lang_str(&self, lang: &str) -> String {
+        match self {
+            Self::Day => t!("recurrence.simple.day", lang),
+            Self::Month => t!("recurrence.simple.month", lang),
+            Self::Year => t!("recurrence.simple.year", lang),
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Recurrence {
     /// Amount of days
@@ -54,19 +65,20 @@ impl Recurrence {
             SimpleRecurrence::Year => Self::Year(days, months, years),
         }
     }
+
 }
 
-impl Display for Recurrence {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Self::Day(days) => write!(f, "Each {} days", days),
-            Self::Month(day, months) => write!(f, "Each {} months on day {}", months, day),
-            Self::Year(day, month, years) => {
-                write!(f, "Each {} years on day {} of month {}", years, day, month)
-            }
-        }
-    }
-}
+// impl Display for Recurrence {
+//     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+//         match self {
+//             Self::Day(days) => write!(f, "Each {} days", days),
+//             Self::Month(day, months) => write!(f, "Each {} months on day {}", months, day),
+//             Self::Year(day, month, years) => {
+//                 write!(f, "Each {} years on day {} of month {}", years, day, month)
+//             }
+//         }
+//     }
+// }
 
 #[cached]
 pub fn times_until(recurrence: Recurrence, from: NaiveDate, to: NaiveDate) -> u32 {
@@ -152,6 +164,18 @@ impl Recurrence {
             Self::Day(_) => "Day",
             Self::Month(_, _) => "Month",
             Self::Year(_, _, _) => "Year",
+        }
+    }
+
+    pub fn to_lang_str(&self, lang: &str) -> String {
+        match self {
+            Self::Day(days) => t!("recurrence.days", days: &format!("{}", days), lang),
+            Self::Month(day, months) => {
+                t!("recurrence.months", day: &format!("{}", day), months: &format!("{}", months), lang)
+            }
+            Self::Year(day, month, years) => {
+                t!("recurrence.years", day: &format!("{}", day), month: &format!("{}", month), years: &format!("{}", years), lang)
+            }
         }
     }
 }

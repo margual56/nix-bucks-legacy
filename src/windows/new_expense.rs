@@ -1,5 +1,6 @@
 use chrono::{NaiveDate, Utc};
 use eframe::egui;
+use internationalization::t;
 
 use crate::FixedExpense;
 
@@ -21,7 +22,7 @@ impl Default for NewExpenseWindow {
 }
 
 impl NewExpenseWindow {
-    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool) -> Option<FixedExpense> {
+    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool, lang: &str) -> Option<FixedExpense> {
         let mut subs: Option<FixedExpense> = None;
         egui::Window::new("New fixed expense")
             .open(show)
@@ -49,7 +50,7 @@ impl NewExpenseWindow {
                         });
 
                         ui.vertical(|ui| {
-                            ui.label("Date");
+                            ui.label(t!("app.table.title.date", "en"));
 
                             ui.add(egui_extras::DatePickerButton::new(&mut self.date));
                         });

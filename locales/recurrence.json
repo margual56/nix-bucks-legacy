@@ -1,0 +1,26 @@
+{
+    "recurrence.simple.day": {
+        "en": "Day",
+        "es": "Día"
+    },
+    "recurrence.simple.month": {
+        "en": "Month",
+        "es": "Mes"
+    },
+    "recurrence.simple.year": {
+        "en": "Year",
+        "es": "Año"
+    },
+    "recurrence.days": {
+        "en": "Each $days days",
+        "es": "Cada $days días"
+    },
+    "recurrence.months": {
+        "en": "Each $months months on day $day",
+        "es": "Cada $months meses el día $day"
+    },
+    "recurrence.years": {
+        "en": "Each $years years on day $day of month $month",
+        "es": "Cada $years años el día $day del mes $month"
+    }
+}

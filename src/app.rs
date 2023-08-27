@@ -9,6 +9,7 @@ use eframe::{
         TextStyle::{Body, Button, Heading, Monospace, Name, Small},
     },
     epaint::{Color32, FontFamily, FontId},
+    CreationContext,
 };
 use egui_extras::{Column, TableBuilder};
 use internationalization::t;
@@ -115,6 +116,30 @@ fn cost_to_year_end(subscriptions: Vec<Subscription>, expenses: Vec<FixedExpense
 }
 
 impl App {
+    pub fn new(cc: &CreationContext) -> Self {
+        // Get current context style
+        let mut style = (*cc.egui_ctx.style()).clone();
+
+        // Redefine text_styles
+        style.text_styles = [
+            (Heading, FontId::new(25.0, FontFamily::Proportional)),
+            (
+                Name("Context".into()),
+                FontId::new(23.0, FontFamily::Proportional),
+            ),
+            (Body, FontId::new(18.0, FontFamily::Proportional)),
+            (Monospace, FontId::new(15.0, FontFamily::Proportional)),
+            (Button, FontId::new(16.0, FontFamily::Proportional)),
+            (Small, FontId::new(10.0, FontFamily::Proportional)),
+        ]
+        .into();
+
+        // Mutate global style with above changes
+        cc.egui_ctx.set_style(style);
+
+        Self::default()
+    }
+
     fn save_data(&self) {
         if let Some(dir) = ProjectDirs::from(QUALIFIER, ORGANIZATION, APPLICATION) {
             if !dir.config_dir().exists() {
@@ -198,7 +223,7 @@ impl App {
         if let Some(win) = self.new_subscription_window.as_mut() {
             let mut show = true;
 
-            if let Some(result) = win.show(ctx, &mut show) {
+            if let Some(result) = win.show(ctx, &mut show, &self.lang) {
                 self.subscriptions.insert(result.uuid(), result);
 
                 self.save_data();
@@ -211,7 +236,7 @@ impl App {
         if let Some(win) = self.new_expense_window.as_mut() {
             let mut show = true;
 
-            if let Some(result) = win.show(ctx, &mut show) {
+            if let Some(result) = win.show(ctx, &mut show, &self.lang) {
                 self.fixed_expenses.insert(result.uuid(), result);
 
                 self.save_data();
@@ -225,7 +250,7 @@ impl App {
         if let Some(win) = self.new_income_window.as_mut() {
             let mut show = true;
 
-            if let Some(result) = win.show(ctx, &mut show) {
+            if let Some(result) = win.show(ctx, &mut show, &self.lang) {
                 self.incomes.insert(result.uuid(), result);
 
                 self.save_data();
@@ -239,7 +264,7 @@ impl App {
         if let Some(win) = self.new_p_income_window.as_mut() {
             let mut show = true;
 
-            if let Some(result) = win.show(ctx, &mut show) {
+            if let Some(result) = win.show(ctx, &mut show, &self.lang) {
                 self.p_incomes.insert(result.uuid(), result);
 
                 self.save_data();
@@ -304,7 +329,7 @@ impl App {
                                         });
                                         row.col(|ui| {
                                             ui.label(RichText::new(
-                                                subscription.recurrence().to_string(),
+                                                subscription.recurrence().to_lang_str(&self.lang),
                                             ));
                                         });
                                         row.col(|ui| {
@@ -646,7 +671,7 @@ impl App {
                                         });
                                         row.col(|ui| {
                                             ui.label(RichText::new(
-                                                subscription.recurrence().to_string(),
+                                                subscription.recurrence().to_lang_str(&self.lang),
                                             ));
                                         });
                                         row.col(|ui| {
@@ -757,33 +782,14 @@ impl App {
 
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Get current context style
-        let mut style = (*ctx.style()).clone();
-
-        // Redefine text_styles
-        style.text_styles = [
-            (Heading, FontId::new(25.0, FontFamily::Proportional)),
-            (
-                Name("Context".into()),
-                FontId::new(23.0, FontFamily::Proportional),
-            ),
-            (Body, FontId::new(18.0, FontFamily::Proportional)),
-            (Monospace, FontId::new(15.0, FontFamily::Proportional)),
-            (Button, FontId::new(16.0, FontFamily::Proportional)),
-            (Small, FontId::new(10.0, FontFamily::Proportional)),
-        ]
-        .into();
-
-        // Mutate global style with above changes
-        ctx.set_style(style);
         self.draw_windows(ctx);
 
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             ui.menu_button(t!("app.language", self.lang), |ui| {
                 let lang = self.lang.clone();
 
-                ui.radio_value(&mut self.lang, String::from("en"), "English");
-                ui.radio_value(&mut self.lang, String::from("es"), "Spanish");
+                ui.radio_value(&mut self.lang, String::from("en"), t!("english", lang));
+                ui.radio_value(&mut self.lang, String::from("es"), t!("spanish", lang));
 
                 if lang != self.lang {
                     self.save_data();
