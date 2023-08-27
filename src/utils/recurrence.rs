@@ -65,7 +65,6 @@ impl Recurrence {
             SimpleRecurrence::Year => Self::Year(days, months, years),
         }
     }
-
 }
 
 // impl Display for Recurrence {

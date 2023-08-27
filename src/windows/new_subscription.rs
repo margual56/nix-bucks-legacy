@@ -9,7 +9,12 @@ pub struct NewSubscriptionWindow {
 }
 
 impl NewSubscriptionWindow {
-    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool, lang: &str) -> Option<Subscription> {
+    pub fn show(
+        &mut self,
+        ctx: &egui::Context,
+        show: &mut bool,
+        lang: &str,
+    ) -> Option<Subscription> {
         let mut subs: Option<Subscription> = None;
         egui::Window::new(t!("window.subscription.title", lang))
             .open(show)
@@ -100,7 +105,7 @@ impl NewSubscriptionWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=31)
-                                                .prefix(t!("window.common.the", lang))
+                                                .prefix(t!("window.common.the", lang)),
                                             );
                                             ui.add(
                                                 egui::DragValue::new(
@@ -109,7 +114,7 @@ impl NewSubscriptionWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=12)
-                                                .prefix(t!("window.common.of_month", lang))
+                                                .prefix(t!("window.common.of_month", lang)),
                                             );
                                         });
                                         ui.add(

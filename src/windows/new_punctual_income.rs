@@ -21,7 +21,12 @@ impl Default for NewPunctualIncomeWindow {
 }
 
 impl NewPunctualIncomeWindow {
-    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool, lang: &str) -> Option<FixedExpense> {
+    pub fn show(
+        &mut self,
+        ctx: &egui::Context,
+        show: &mut bool,
+        lang: &str,
+    ) -> Option<FixedExpense> {
         let mut subs: Option<FixedExpense> = None;
         egui::Window::new("New punctual income")
             .open(show)

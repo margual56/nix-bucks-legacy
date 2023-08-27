@@ -8,7 +8,12 @@ pub struct NewIncomeWindow {
 }
 
 impl NewIncomeWindow {
-    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool, lang: &str) -> Option<Subscription> {
+    pub fn show(
+        &mut self,
+        ctx: &egui::Context,
+        show: &mut bool,
+        lang: &str,
+    ) -> Option<Subscription> {
         let mut subs: Option<Subscription> = None;
         egui::Window::new("New income source")
             .open(show)
