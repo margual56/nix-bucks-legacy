@@ -470,23 +470,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "budgeting"
-version = "0.1.1"
-dependencies = [
- "cached",
- "chrono",
- "directories",
- "eframe",
- "egui_extras",
- "num-traits",
- "once_cell",
- "ordered-float",
- "serde",
- "serde_json",
- "uuid",
-]
-
-[[package]]
 name = "bumpalo"
 version = "3.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1869,6 +1852,23 @@ dependencies = [
  "libc",
  "memoffset 0.7.1",
  "static_assertions",
+]
+
+[[package]]
+name = "nix-bucks"
+version = "0.1.2"
+dependencies = [
+ "cached",
+ "chrono",
+ "directories",
+ "eframe",
+ "egui_extras",
+ "num-traits",
+ "once_cell",
+ "ordered-float",
+ "serde",
+ "serde_json",
+ "uuid",
 ]
 
 [[package]]

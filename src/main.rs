@@ -1,6 +1,6 @@
 use eframe::egui;
 
-use budgeting::App;
+use nix_bucks::App;
 
 fn main() {
     let options = eframe::NativeOptions {
@@ -11,5 +11,5 @@ fn main() {
         ..Default::default()
     };
 
-    eframe::run_native("Budgeting", options, Box::new(|_cc| Box::<App>::default())).unwrap();
+    eframe::run_native("NixBucks", options, Box::new(|_cc| Box::<App>::default())).unwrap();
 }
