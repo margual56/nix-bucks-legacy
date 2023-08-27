@@ -745,7 +745,10 @@ impl App {
                 });
             ui.separator();
 
-            if ui.button(t!("app.button.new_punctual_income", self.lang)).clicked() {
+            if ui
+                .button(t!("app.button.new_punctual_income", self.lang))
+                .clicked()
+            {
                 self.new_p_income_window = Some(NewPunctualIncomeWindow::default());
             }
         })
@@ -775,74 +778,105 @@ impl eframe::App for App {
         ctx.set_style(style);
         self.draw_windows(ctx);
 
+        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+            ui.menu_button(t!("app.language", self.lang), |ui| {
+                let lang = self.lang.clone();
+
+                ui.radio_value(&mut self.lang, String::from("en"), "English");
+                ui.radio_value(&mut self.lang, String::from("es"), "Spanish");
+
+                if lang != self.lang {
+                    self.save_data();
+                }
+            });
+        });
+
         egui::CentralPanel::default().show(ctx, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 ui.vertical_centered_justified(|ui| {
-                    ui.collapsing(RichText::new(t!("app.collapsing.expenses", self.lang)).heading(), |ui| {
-                        ui.horizontal(|ui| {
-                            egui::ScrollArea::horizontal().show(ui, |ui| {
-                                TableBuilder::new(ui)
-                                    .auto_shrink([false, true])
-                                    .vscroll(false)
-                                    .column(
-                                        Column::auto().at_least(450.0).clip(true).resizable(false),
-                                    )
-                                    .column(Column::auto().at_least(25.0).resizable(false))
-                                    .column(
-                                        Column::auto().at_least(450.0).clip(true).resizable(false),
-                                    )
-                                    .body(|mut body| {
-                                        body.row(200.0, |mut row| {
-                                            row.col(|ui| {
-                                                self.subscriptions_table(ui);
-                                            });
+                    ui.collapsing(
+                        RichText::new(t!("app.collapsing.expenses", self.lang)).heading(),
+                        |ui| {
+                            ui.horizontal(|ui| {
+                                egui::ScrollArea::horizontal().show(ui, |ui| {
+                                    TableBuilder::new(ui)
+                                        .auto_shrink([false, true])
+                                        .vscroll(false)
+                                        .column(
+                                            Column::auto()
+                                                .at_least(450.0)
+                                                .clip(true)
+                                                .resizable(false),
+                                        )
+                                        .column(Column::auto().at_least(25.0).resizable(false))
+                                        .column(
+                                            Column::auto()
+                                                .at_least(450.0)
+                                                .clip(true)
+                                                .resizable(false),
+                                        )
+                                        .body(|mut body| {
+                                            body.row(200.0, |mut row| {
+                                                row.col(|ui| {
+                                                    self.subscriptions_table(ui);
+                                                });
 
-                                            row.col(|ui| {
-                                                ui.spacing();
-                                            });
+                                                row.col(|ui| {
+                                                    ui.spacing();
+                                                });
 
-                                            row.col(|ui| {
-                                                self.expenses_table(ui);
-                                            });
-                                        })
-                                    });
+                                                row.col(|ui| {
+                                                    self.expenses_table(ui);
+                                                });
+                                            })
+                                        });
+                                });
                             });
-                        });
-                    });
+                        },
+                    );
 
                     ui.add_space(25.0);
 
-                    ui.collapsing(RichText::new(t!("app.collapsing.income", self.lang)).heading(), |ui| {
-                        ui.horizontal(|ui| {
-                            egui::ScrollArea::horizontal().show(ui, |ui| {
-                                TableBuilder::new(ui)
-                                    .vscroll(false)
-                                    .auto_shrink([false, true])
-                                    .column(
-                                        Column::auto().at_least(450.0).clip(true).resizable(false),
-                                    )
-                                    .column(Column::auto().at_least(25.0))
-                                    .column(
-                                        Column::auto().at_least(450.0).clip(true).resizable(false),
-                                    )
-                                    .body(|mut body| {
-                                        body.row(200.0, |mut row| {
-                                            row.col(|ui| {
-                                                self.income_table(ui);
-                                            });
+                    ui.collapsing(
+                        RichText::new(t!("app.collapsing.income", self.lang)).heading(),
+                        |ui| {
+                            ui.horizontal(|ui| {
+                                egui::ScrollArea::horizontal().show(ui, |ui| {
+                                    TableBuilder::new(ui)
+                                        .vscroll(false)
+                                        .auto_shrink([false, true])
+                                        .column(
+                                            Column::auto()
+                                                .at_least(450.0)
+                                                .clip(true)
+                                                .resizable(false),
+                                        )
+                                        .column(Column::auto().at_least(25.0))
+                                        .column(
+                                            Column::auto()
+                                                .at_least(450.0)
+                                                .clip(true)
+                                                .resizable(false),
+                                        )
+                                        .body(|mut body| {
+                                            body.row(200.0, |mut row| {
+                                                row.col(|ui| {
+                                                    self.income_table(ui);
+                                                });
 
-                                            row.col(|ui| {
-                                                ui.spacing();
-                                            });
+                                                row.col(|ui| {
+                                                    ui.spacing();
+                                                });
 
-                                            row.col(|ui| {
-                                                self.punctual_income_table(ui);
+                                                row.col(|ui| {
+                                                    self.punctual_income_table(ui);
+                                                });
                                             });
                                         });
-                                    });
+                                });
                             });
-                        });
-                    });
+                        },
+                    );
 
                     ui.add_space(15.0);
                     ui.separator();

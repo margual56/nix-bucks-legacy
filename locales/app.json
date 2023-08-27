@@ -66,6 +66,9 @@
     "app.button.new_punctual_income": {
         "en": "New punctual income",
         "es": "Nuevo ingreso puntual"
+    },
+    "app.language": {
+        "en": "Language",
+        "es": "Idioma"
     }
-
 }
