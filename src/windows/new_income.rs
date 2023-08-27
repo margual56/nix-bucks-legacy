@@ -13,7 +13,7 @@ impl NewIncomeWindow {
         egui::Window::new("New income source")
             .open(show)
             .auto_sized()
-            .default_size(&[600.0, 200.0])
+            .default_size([600.0, 200.0])
             .show(ctx, |ui| {
                 ui.vertical_centered(|ui| {
                     ui.horizontal_centered(|ui| {
@@ -131,6 +131,6 @@ impl NewIncomeWindow {
                 });
             });
 
-        return subs;
+        subs
     }
 }

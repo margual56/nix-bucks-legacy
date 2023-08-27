@@ -26,6 +26,7 @@ pub struct App {
     incomes: HashMap<Uuid, Subscription>,
     fixed_expenses: HashMap<Uuid, FixedExpense>,
     p_incomes: HashMap<Uuid, FixedExpense>,
+    dismissed_ad: bool,
 
     #[serde(skip)]
     new_subscription_window: Option<NewSubscriptionWindow>,
@@ -42,7 +43,7 @@ pub struct App {
 
 impl Default for App {
     fn default() -> Self {
-        if let Some(dir) = ProjectDirs::from("com", "margual56", "Budgeting App") {
+        if let Some(dir) = ProjectDirs::from("com", "margual56", "NixBucks") {
             let mut path = match std::fs::File::open(dir.config_dir().join("config.json")) {
                 Ok(p) => p,
                 Err(e) => {
@@ -53,6 +54,7 @@ impl Default for App {
                         fixed_expenses: HashMap::new(),
                         incomes: HashMap::new(),
                         p_incomes: HashMap::new(),
+                        dismissed_ad: false,
 
                         new_subscription_window: None,
                         new_expense_window: None,
@@ -75,6 +77,7 @@ impl Default for App {
                 fixed_expenses: HashMap::new(),
                 incomes: HashMap::new(),
                 p_incomes: HashMap::new(),
+                dismissed_ad: false,
 
                 new_subscription_window: None,
                 new_expense_window: None,

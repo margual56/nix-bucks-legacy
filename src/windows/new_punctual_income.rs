@@ -26,7 +26,7 @@ impl NewPunctualIncomeWindow {
         egui::Window::new("New punctual income")
             .open(show)
             .auto_sized()
-            .default_size(&[600.0, 200.0])
+            .default_size([600.0, 200.0])
             .show(ctx, |ui| {
                 ui.vertical_centered(|ui| {
                     ui.horizontal_centered(|ui| {
@@ -62,6 +62,6 @@ impl NewPunctualIncomeWindow {
                 });
             });
 
-        return subs;
+        subs
     }
 }

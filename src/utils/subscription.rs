@@ -30,12 +30,12 @@ impl Default for TmpSubscription {
     }
 }
 
-impl Into<Subscription> for TmpSubscription {
-    fn into(self) -> Subscription {
+impl From<TmpSubscription> for Subscription {
+    fn from(val: TmpSubscription) -> Self {
         Subscription::new(
-            self.name.to_string(),
-            self.cost,
-            Recurrence::from_simple_recurrence(self.recurrence, self.days, self.months, self.years),
+            val.name.to_string(),
+            val.cost,
+            Recurrence::from_simple_recurrence(val.recurrence, val.days, val.months, val.years),
         )
     }
 }
