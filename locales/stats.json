@@ -1,0 +1,27 @@
+{
+    "app.title.stats": {
+        "en": "Stats",
+        "es": "Estadísticas"
+    },
+    "stats.avg_cost_month": {
+        "en": "Average cost per month:",
+        "es": "Coste promedio por mes:"
+    },
+    "stats.total_cost_til_eoy": {
+        "en": "Total cost until the end of the current year:",
+        "es": "Coste total hasta el final del año actual:"
+    },
+    "stats.total_income_til_eoy": {
+        "en": "Total income until the end of the current year:",
+        "es": "Ingreso total hasta el final del año actual:"
+    },
+    "stats.balance_eoy": {
+        "en": "Balance at the end of the current year:",
+        "es": "Balance al final del año actual:"
+    },
+    "stats.balance_eom": {
+        "en": "Balance per month:",
+        "es": "Balance por mes:"
+    }
+}
+

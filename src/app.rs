@@ -32,6 +32,7 @@ pub struct App {
     fixed_expenses: HashMap<Uuid, FixedExpense>,
     p_incomes: HashMap<Uuid, FixedExpense>,
     dismissed_ad: bool,
+    lang: String,
 
     #[serde(skip)]
     new_subscription_window: Option<NewSubscriptionWindow>,
@@ -60,6 +61,7 @@ impl Default for App {
                         incomes: HashMap::new(),
                         p_incomes: HashMap::new(),
                         dismissed_ad: false,
+                        lang: String::from("en"),
 
                         new_subscription_window: None,
                         new_expense_window: None,
@@ -83,6 +85,7 @@ impl Default for App {
                 incomes: HashMap::new(),
                 p_incomes: HashMap::new(),
                 dismissed_ad: false,
+                lang: String::from("en"),
 
                 new_subscription_window: None,
                 new_expense_window: None,
@@ -250,7 +253,7 @@ impl App {
 
     fn subscriptions_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
-            ui.heading(t!("app.title.subscriptions", lang = "en"));
+            ui.heading(t!("app.title.subscriptions", self.lang));
             ui.separator();
             ui.push_id("subscriptions", |ui| {
                 egui::ScrollArea::both()
@@ -278,13 +281,13 @@ impl App {
                             .column(Column::auto().at_least(50.0).at_most(100.0).resizable(true))
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
-                                    ui.heading(t!("app.table.title.concept"));
+                                    ui.heading(t!("app.table.title.concept", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Cost");
+                                    ui.heading(t!("app.table.title.cost", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Recurrence");
+                                    ui.heading(t!("app.table.title.recurrence", self.lang));
                                 });
                             })
                             .body(|mut body| {
@@ -305,7 +308,10 @@ impl App {
                                             ));
                                         });
                                         row.col(|ui| {
-                                            if ui.button("Delete").clicked() {
+                                            if ui
+                                                .button(t!("app.button.delete", self.lang))
+                                                .clicked()
+                                            {
                                                 self.subscriptions.remove(&uuid);
                                                 self.save_data();
                                             }
@@ -318,7 +324,10 @@ impl App {
 
             ui.separator();
 
-            if ui.button("New subscription").clicked() {
+            if ui
+                .button(t!("app.button.new.subscription", self.lang))
+                .clicked()
+            {
                 self.new_subscription_window = Some(NewSubscriptionWindow::default());
             }
         })
@@ -326,14 +335,14 @@ impl App {
 
     fn expenses_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
-            ui.heading("Fixed expenses");
+            ui.heading(t!("app.title.fixed_expenses", self.lang));
             ui.separator();
-            ui.push_id("expenses", |ui| {
-                egui::ScrollArea::both()
-                    .id_source("Expenses scroll area")
-                    .auto_shrink([true, true])
-                    .max_height(ui.available_height() - 35.0)
-                    .show(ui, |ui| {
+            egui::ScrollArea::both()
+                .id_source("Expenses scroll area")
+                .auto_shrink([true, true])
+                .max_height(ui.available_height() - 35.0)
+                .show(ui, |ui| {
+                    ui.push_id("expenses", |ui| {
                         TableBuilder::new(ui)
                             .striped(true)
                             .auto_shrink([true, true])
@@ -354,13 +363,13 @@ impl App {
                             .column(Column::auto().at_least(50.0).at_most(100.0).resizable(true))
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
-                                    ui.heading("Concept");
+                                    ui.heading(t!("app.table.title.concept", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Cost");
+                                    ui.heading(t!("app.table.title.cost", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Date");
+                                    ui.heading(t!("app.table.title.date", self.lang));
                                 });
                             })
                             .body(|mut body| {
@@ -379,7 +388,10 @@ impl App {
                                             ui.label(RichText::new(expense.date().to_string()));
                                         });
                                         row.col(|ui| {
-                                            if ui.button("Delete").clicked() {
+                                            if ui
+                                                .button(t!("app.button.delete", self.lang))
+                                                .clicked()
+                                            {
                                                 self.fixed_expenses.remove(&uuid);
                                                 self.save_data();
                                             }
@@ -388,10 +400,13 @@ impl App {
                                 }
                             });
                     });
-            });
+                });
             ui.separator();
 
-            if ui.button("New fixed expense").clicked() {
+            if ui
+                .button(t!("app.button.new.fixed_expense", self.lang))
+                .clicked()
+            {
                 self.new_expense_window = Some(NewExpenseWindow::default());
             }
         })
@@ -401,7 +416,7 @@ impl App {
         ui.vertical(|ui| {
             ui.add_space(20.0);
             ui.vertical_centered(|ui| {
-                ui.heading("Stats");
+                ui.heading(t!("app.title.stats", self.lang));
             });
             ui.spacing();
 
@@ -421,7 +436,7 @@ impl App {
                                     ui.spacing();
                                 });
                                 row.col(|ui| {
-                                    ui.label(RichText::new("Total (average) cost per month:"));
+                                    ui.label(RichText::new(t!("stats.avg_cost_month", self.lang)));
                                 });
                                 row.col(|ui| {
                                     ui.label(
@@ -440,9 +455,10 @@ impl App {
                                 });
 
                                 row.col(|ui| {
-                                    ui.label(RichText::new(
-                                        "Total cost until the end of the year:",
-                                    ));
+                                    ui.label(RichText::new(t!(
+                                        "stats.total_cost_til_eoy",
+                                        self.lang
+                                    )));
                                 });
                                 row.col(|ui| {
                                     ui.label(
@@ -460,15 +476,16 @@ impl App {
                                     ui.spacing();
                                 });
                             });
-                           
+
                             body.row(20.0, |mut row| {
                                 row.col(|ui| {
                                     ui.spacing();
                                 });
                                 row.col(|ui| {
-                                    ui.label(RichText::new(
-                                        "Total income until the end of the year:",
-                                    ));
+                                    ui.label(RichText::new(t!(
+                                        "stats.total_income_til_eoy",
+                                        self.lang
+                                    )));
                                 });
 
                                 row.col(|ui| {
@@ -514,8 +531,7 @@ impl App {
                                 });
                                 row.col(|ui| {
                                     ui.label(
-                                        RichText::new("Total balance at the end of the year:")
-                                            .strong(),
+                                        RichText::new(t!("stats.balance_eoy", self.lang)).strong(),
                                     );
                                 });
 
@@ -550,8 +566,7 @@ impl App {
                                 });
                                 row.col(|ui| {
                                     ui.label(
-                                        RichText::new("Total monthly balance:")
-                                            .strong(),
+                                        RichText::new(t!("stats.balance_eom", self.lang)).strong(),
                                     );
                                 });
 
@@ -580,14 +595,14 @@ impl App {
 
     fn income_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
-            ui.heading("Income streams");
+            ui.heading(t!("app.title.income_streams", self.lang));
             ui.separator();
-            ui.push_id("incomes", |ui| {
-                egui::ScrollArea::both()
-                    .id_source("Subscriptions1 scroll area")
-                    .auto_shrink([true, true])
-                    .max_height(ui.available_height() - 35.0)
-                    .show(ui, |ui| {
+            egui::ScrollArea::both()
+                .id_source("Subscriptions1 scroll area")
+                .auto_shrink([true, true])
+                .max_height(ui.available_height() - 35.0)
+                .show(ui, |ui| {
+                    ui.push_id("incomes", |ui| {
                         TableBuilder::new(ui)
                             .striped(true)
                             .auto_shrink([true, true])
@@ -608,13 +623,13 @@ impl App {
                             .column(Column::auto().at_least(50.0).at_most(100.0).resizable(true))
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
-                                    ui.heading("Concept");
+                                    ui.heading(t!("app.table.title.concept", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Amount");
+                                    ui.heading(t!("app.table.title.cost", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Recurrence");
+                                    ui.heading(t!("app.table.title.recurrence", self.lang));
                                 });
                             })
                             .body(|mut body| {
@@ -635,7 +650,10 @@ impl App {
                                             ));
                                         });
                                         row.col(|ui| {
-                                            if ui.button("Delete").clicked() {
+                                            if ui
+                                                .button(t!("app.button.delete", self.lang))
+                                                .clicked()
+                                            {
                                                 self.incomes.remove(&uuid);
                                                 self.save_data();
                                             }
@@ -644,11 +662,14 @@ impl App {
                                 }
                             });
                     });
-            });
+                });
 
             ui.separator();
 
-            if ui.button("New income stream").clicked() {
+            if ui
+                .button(t!("app.button.new.income_stream", self.lang))
+                .clicked()
+            {
                 self.new_income_window = Some(NewIncomeWindow::default());
             }
         })
@@ -656,7 +677,7 @@ impl App {
 
     fn punctual_income_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
-            ui.heading("Punctial income");
+            ui.heading(t!("app.title.punctual_income", self.lang));
             ui.separator();
             egui::ScrollArea::both()
                 .id_source("Expenses1 scroll area")
@@ -684,13 +705,13 @@ impl App {
                             .column(Column::auto().at_least(50.0).at_most(100.0).resizable(true))
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
-                                    ui.heading("Concept");
+                                    ui.heading(t!("app.table.title.concept", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Amount");
+                                    ui.heading(t!("app.table.title.cost", self.lang));
                                 });
                                 header.col(|ui| {
-                                    ui.heading("Date");
+                                    ui.heading(t!("app.table.title.date", self.lang));
                                 });
                             })
                             .body(|mut body| {
@@ -709,7 +730,10 @@ impl App {
                                             ui.label(RichText::new(expense.date().to_string()));
                                         });
                                         row.col(|ui| {
-                                            if ui.button("Delete").clicked() {
+                                            if ui
+                                                .button(t!("app.button.delete", self.lang))
+                                                .clicked()
+                                            {
                                                 self.p_incomes.remove(&uuid);
                                                 self.save_data();
                                             }
@@ -721,7 +745,7 @@ impl App {
                 });
             ui.separator();
 
-            if ui.button("New punctial income").clicked() {
+            if ui.button(t!("app.button.new_punctual_income", self.lang)).clicked() {
                 self.new_p_income_window = Some(NewPunctualIncomeWindow::default());
             }
         })
@@ -754,24 +778,18 @@ impl eframe::App for App {
         egui::CentralPanel::default().show(ctx, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 ui.vertical_centered_justified(|ui| {
-                    ui.collapsing(RichText::new("Expenses").heading(), |ui| {
+                    ui.collapsing(RichText::new(t!("app.collapsing.expenses", self.lang)).heading(), |ui| {
                         ui.horizontal(|ui| {
                             egui::ScrollArea::horizontal().show(ui, |ui| {
                                 TableBuilder::new(ui)
                                     .auto_shrink([false, true])
                                     .vscroll(false)
                                     .column(
-                                        Column::auto()
-                                            .at_least(450.0)
-                                            .clip(true)
-                                            .resizable(false),
+                                        Column::auto().at_least(450.0).clip(true).resizable(false),
                                     )
                                     .column(Column::auto().at_least(25.0).resizable(false))
                                     .column(
-                                        Column::auto()
-                                            .at_least(450.0)
-                                            .clip(true)
-                                            .resizable(false),
+                                        Column::auto().at_least(450.0).clip(true).resizable(false),
                                     )
                                     .body(|mut body| {
                                         body.row(200.0, |mut row| {
@@ -794,24 +812,18 @@ impl eframe::App for App {
 
                     ui.add_space(25.0);
 
-                    ui.collapsing(RichText::new("Income").heading(), |ui| {
+                    ui.collapsing(RichText::new(t!("app.collapsing.income", self.lang)).heading(), |ui| {
                         ui.horizontal(|ui| {
                             egui::ScrollArea::horizontal().show(ui, |ui| {
                                 TableBuilder::new(ui)
                                     .vscroll(false)
                                     .auto_shrink([false, true])
                                     .column(
-                                        Column::auto()
-                                            .at_least(450.0)
-                                            .clip(true)
-                                            .resizable(false),
+                                        Column::auto().at_least(450.0).clip(true).resizable(false),
                                     )
                                     .column(Column::auto().at_least(25.0))
                                     .column(
-                                        Column::auto()
-                                            .at_least(450.0)
-                                            .clip(true)
-                                            .resizable(false),
+                                        Column::auto().at_least(450.0).clip(true).resizable(false),
                                     )
                                     .body(|mut body| {
                                         body.row(200.0, |mut row| {
@@ -837,7 +849,7 @@ impl eframe::App for App {
                     ui.add_space(15.0);
 
                     ui.horizontal(|ui| {
-                        ui.heading("Initial savings: ");
+                        ui.heading(t!("app.title.initial_savings", self.lang));
 
                         let prev = self.initial_savings;
                         ui.add(

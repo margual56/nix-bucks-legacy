@@ -3,11 +3,38 @@
         "en": "Subscriptions",
         "es": "Suscripciones"
     },
+    "app.title.fixed_expenses": {
+        "en": "Fixed expenses",
+        "es": "Gastos fijos"
+    },
+    "app.title.income_streams": {
+        "en": "Income streams",
+        "es": "Fuentes de ingresos"
+    },
+    "app.title.punctual_income": {
+        "en": "Punctual income",
+        "es": "Ingresos puntuales"
+    },
+    "app.title.stats": {
+        "en": "Stats",
+        "es:": "Estadísticas"
+    },
+    "app.title.initial_savings": {
+        "en": "Initial savings:",
+        "es": "Ahorro inicial:"
+    },
+    "app.collapsing.expenses": {
+        "en": "Expenses",
+        "es": "Gastos"
+    },
+    "app.collapsing.income": {
+        "en": "Income",
+        "es": "Ingresos"
+    },
     "app.table.title.concept": {
         "en": "Concept",
         "es": "Concepto"
     },
-
     "app.table.title.cost": {
         "en": "Cost",
         "es": "Coste"
@@ -15,5 +42,30 @@
     "app.table.title.recurrence": {
         "en": "Recurrence",
         "es": "Recurrencia"
+    },
+    "app.table.title.date": {
+        "en": "Date",
+        "es": "Fecha"
+    },
+    "app.button.delete": {
+        "en": "Delete",
+        "es": "Eliminar"
+    },
+    "app.button.new.subscription": {
+        "en": "New subscription",
+        "es": "Nueva suscripción"
+    },
+    "app.button.new.fixed_expense": {
+        "en": "New fixed expense",
+        "es": "Nuevo gasto fijo"
+    },
+    "app.button.new.income_stream": {
+        "en": "New income stream",
+        "es": "Nueva fuente de ingresos"
+    },
+    "app.button.new_punctual_income": {
+        "en": "New punctual income",
+        "es": "Nuevo ingreso puntual"
     }
+
 }
