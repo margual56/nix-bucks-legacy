@@ -11,6 +11,7 @@ use eframe::{
     epaint::{Color32, FontFamily, FontId},
 };
 use egui_extras::{Column, TableBuilder};
+use internationalization::t;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -18,6 +19,10 @@ use crate::{
     FixedExpense, NewExpenseWindow, NewIncomeWindow, NewPunctualIncomeWindow,
     NewSubscriptionWindow, Subscription,
 };
+
+const QUALIFIER: &str = "com";
+const ORGANIZATION: &str = "margual56";
+const APPLICATION: &str = "NixBucks";
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct App {
@@ -43,7 +48,7 @@ pub struct App {
 
 impl Default for App {
     fn default() -> Self {
-        if let Some(dir) = ProjectDirs::from("com", "margual56", "NixBucks") {
+        if let Some(dir) = ProjectDirs::from(QUALIFIER, ORGANIZATION, APPLICATION) {
             let mut path = match std::fs::File::open(dir.config_dir().join("config.json")) {
                 Ok(p) => p,
                 Err(e) => {
@@ -108,7 +113,7 @@ fn cost_to_year_end(subscriptions: Vec<Subscription>, expenses: Vec<FixedExpense
 
 impl App {
     fn save_data(&self) {
-        if let Some(dir) = ProjectDirs::from("com", "margual56", "Budgeting App") {
+        if let Some(dir) = ProjectDirs::from(QUALIFIER, ORGANIZATION, APPLICATION) {
             if !dir.config_dir().exists() {
                 std::fs::create_dir_all(dir.config_dir()).unwrap();
             }
@@ -245,7 +250,7 @@ impl App {
 
     fn subscriptions_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
-            ui.heading("Subscriptions");
+            ui.heading(t!("app.title.subscriptions", lang = "en"));
             ui.separator();
             ui.push_id("subscriptions", |ui| {
                 egui::ScrollArea::both()
@@ -273,7 +278,7 @@ impl App {
                             .column(Column::auto().at_least(50.0).at_most(100.0).resizable(true))
                             .header(20.0, |mut header| {
                                 header.col(|ui| {
-                                    ui.heading("Concept");
+                                    ui.heading(t!("app.table.title.concept"));
                                 });
                                 header.col(|ui| {
                                     ui.heading("Cost");

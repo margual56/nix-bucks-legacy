@@ -1274,6 +1274,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "glob"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
+
+[[package]]
 name = "glow"
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1547,6 +1553,20 @@ dependencies = [
  "js-sys",
  "wasm-bindgen",
  "web-sys",
+]
+
+[[package]]
+name = "internationalization"
+version = "0.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a66e4d02c791725fd63d8a1e3d476460f724e739482d80656265cfff1d198ef1"
+dependencies = [
+ "glob",
+ "lazy_static",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "serde_json",
 ]
 
 [[package]]
@@ -1856,13 +1876,14 @@ dependencies = [
 
 [[package]]
 name = "nix-bucks"
-version = "0.1.2"
+version = "0.1.1"
 dependencies = [
  "cached",
  "chrono",
  "directories",
  "eframe",
  "egui_extras",
+ "internationalization",
  "num-traits",
  "once_cell",
  "ordered-float",

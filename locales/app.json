@@ -1,0 +1,19 @@
+{
+    "app.title.subscriptions": {
+        "en": "Subscriptions",
+        "es": "Suscripciones"
+    },
+    "app.table.title.concept": {
+        "en": "Concept",
+        "es": "Concepto"
+    },
+
+    "app.table.title.cost": {
+        "en": "Cost",
+        "es": "Coste"
+    },
+    "app.table.title.recurrence": {
+        "en": "Recurrence",
+        "es": "Recurrencia"
+    }
+}
