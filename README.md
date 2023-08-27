@@ -3,7 +3,6 @@ A simple budgeting app
 
 ![Demo](https://github.com/margual56/budgeting/assets/30444886/74378021-9cb7-4e22-9ea5-c512e6077c5c)
 
-
 # Install
 - Running the pre-compiled binary: Go to [the releases page](https://github.com/margual56/budgeting/releases/latest) and download the appropriate version for you.
 - With cargo: `cargo install https://github.com/margual56/budgeting.git`.
@@ -32,6 +31,7 @@ Remember that you can back up the config file, and also you can create copies to
 - Do statistics with the data
 
 ## Planned features
+- Translation to Spanish (if you know more languages, please feel free to contribute)!
 - A complete overhaul of the UI: New colors, new layout, new design. I hired a professional designer to design this (please consider donating).
 - A small banner at the bottom that only shows up the second time that you open the program. Once you dismiss it, it won't show up again. It will ask the user to consider donating to the project.
 - An icon for the application.
