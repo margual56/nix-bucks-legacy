@@ -111,7 +111,7 @@ impl Recurrence {
 /// # Examples
 /// ```
 /// use chrono::NaiveDate;
-/// use budget_manager::{Recurrence, times_until};
+/// use nix_bucks::{Recurrence, times_until};
 ///
 /// fn main() {
 ///    let start = NaiveDate::from_ymd_opt(2021, 1, 1).unwrap();
@@ -119,7 +119,7 @@ impl Recurrence {
 ///
 ///    let recurrence = Recurrence::Month(1, 1);
 ///    let times = times_until(recurrence, start, end);
-///    assert_eq!(times, 12);
+///    assert_eq!(times, 14);
 ///
 ///    println!("{}", times);
 /// }

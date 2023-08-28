@@ -61,17 +61,17 @@ impl Subscription {
     /// - A new subscription.
     /// # Examples
     /// ```
-    /// use budget_manager::{Subscription, Recurrence};
+    /// use nix_bucks::{Subscription, Recurrence};
     /// use chrono::{Utc, NaiveDate};
     ///
     /// pub fn main() {
     ///    let subscription = Subscription::new(
     ///        String::from("My new subscription"),
-    ///        123,
+    ///        123.0,
     ///        Recurrence::Month(1, 1)
     ///    );
     ///
-    ///    pritnln!("{:?}", subscription);
+    ///    println!("{:?}", subscription);
     /// }
     /// ```
     pub fn new(name: String, cost: f32, recurrence: Recurrence) -> Self {

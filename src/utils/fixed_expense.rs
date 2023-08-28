@@ -35,12 +35,12 @@ impl FixedExpense {
     /// # Examples
     /// ```
     /// use chrono::{Utc, NaiveDate};
-    /// use budget_manager::FixedExpense;
+    /// use nix_bucks::FixedExpense;
     ///
     /// pub fn main() {
     ///    let fixed_expense = FixedExpense::new(
     ///        String::from("My new fixed expense"),
-    ///        123
+    ///        123.0,
     ///        Utc::now().naive_utc().date()
     ///     );
     ///
