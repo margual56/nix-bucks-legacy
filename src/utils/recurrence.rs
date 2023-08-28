@@ -2,9 +2,15 @@ use cached::proc_macro::cached;
 use chrono::{Datelike, Days, Months, NaiveDate};
 use internationalization::t;
 
-use core::fmt::Display;
 use serde::{Deserialize, Serialize};
 
+/// Returns the amount of days in a month.
+/// This function is cached: It will only run once for each value you give it. Then, it caches the
+/// result and returns it when you call it again with the same value.
+/// # Arguments
+/// - `m`: The month.
+/// # Returns
+/// - The amount of days in the month.
 #[allow(dead_code)]
 #[cached]
 pub fn days_in_month(m: u8) -> u8 {
@@ -25,6 +31,7 @@ pub fn days_in_month(m: u8) -> u8 {
     }
 }
 
+/// A simplified version of the recurrence enum.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SimpleRecurrence {
     Day,
@@ -33,6 +40,11 @@ pub enum SimpleRecurrence {
 }
 
 impl SimpleRecurrence {
+    /// Returns the string representation according to the language given.
+    /// # Arguments
+    /// - `lang`: The language.
+    /// # Returns
+    /// - The string representation according to the language given.
     pub fn to_lang_str(&self, lang: &str) -> String {
         match self {
             Self::Day => t!("recurrence.simple.day", lang),
@@ -42,6 +54,7 @@ impl SimpleRecurrence {
     }
 }
 
+/// A more complex recurrence enum. It stores the recurrence in a more complex way.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Recurrence {
     /// Amount of days
@@ -53,6 +66,13 @@ pub enum Recurrence {
 }
 
 impl Recurrence {
+    /// Creates a recurrence from a simple recurrence.
+    /// # Arguments
+    /// - `value`: The simple recurrence.
+    /// - `days`: The amount of days if it's a `Day` recurrence OR the day of the month otherwise.
+    /// - `months`: The amount of months if it's a `Month` recurrence OR the month of the year otherwise.
+    /// - `years`: The amount of years if it's a `Year` recurrence.
+    ///
     pub fn from_simple_recurrence(
         value: SimpleRecurrence,
         days: u8,
@@ -79,6 +99,31 @@ impl Recurrence {
 //     }
 // }
 
+/// Returns the amount of times the recurrence occurs between the two given dates.
+/// This function is cached: It will only run once for each value you give it. Then, it caches the
+/// result and returns it when you call it again with the same value.
+/// # Arguments
+/// - `recurrence`: The recurrence.
+/// - `from`: The starting date.
+/// - `to`: The target date.
+/// # Returns
+/// - The amount of times the recurrence occurs between the two given dates.
+/// # Examples
+/// ```
+/// use chrono::NaiveDate;
+/// use budget_manager::{Recurrence, times_until};
+///
+/// fn main() {
+///    let start = NaiveDate::from_ymd_opt(2021, 1, 1).unwrap();
+///    let end = NaiveDate::from_ymd_opt(2022, 1, 1).unwrap();
+///
+///    let recurrence = Recurrence::Month(1, 1);
+///    let times = times_until(recurrence, start, end);
+///    assert_eq!(times, 12);
+///
+///    println!("{}", times);
+/// }
+/// ```
 #[cached]
 pub fn times_until(recurrence: Recurrence, from: NaiveDate, to: NaiveDate) -> u32 {
     match recurrence {
@@ -158,6 +203,11 @@ pub fn times_until(recurrence: Recurrence, from: NaiveDate, to: NaiveDate) -> u3
 }
 
 impl Recurrence {
+    /// Returns the string representation according to the language given.
+    /// # Arguments
+    /// - `lang`: The language.
+    /// # Returns
+    /// - The string representation according to the language given.
     pub fn to_simple_str(&self) -> &str {
         match self {
             Self::Day(_) => "Day",
@@ -166,6 +216,11 @@ impl Recurrence {
         }
     }
 
+    /// Returns the string representation according to the language given.
+    /// # Arguments
+    /// - `lang`: The language.
+    /// # Returns
+    /// - The string representation according to the language given.
     pub fn to_lang_str(&self, lang: &str) -> String {
         match self {
             Self::Day(days) => t!("recurrence.days", days: &format!("{}", days), lang),

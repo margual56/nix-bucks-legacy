@@ -7,6 +7,8 @@ use uuid::Uuid;
 
 use super::{times_until, Recurrence, SimpleRecurrence};
 
+/// A temporary subscription is a subscription that is not yet saved.
+/// It's used to create a new subscription.
 #[derive(Clone)]
 pub struct TmpSubscription {
     pub name: String,
@@ -40,6 +42,7 @@ impl From<TmpSubscription> for Subscription {
     }
 }
 
+/// A subscription is a recurrent expense.
 #[derive(Clone, Debug, Serialize, Deserialize, Hash, PartialEq, Eq)]
 pub struct Subscription {
     uuid: Uuid,
@@ -49,6 +52,28 @@ pub struct Subscription {
 }
 
 impl Subscription {
+    /// Create a new subscription.
+    /// # Arguments
+    /// - `name`: The name of the subscription.
+    /// - `cost`: The cost of the subscription.
+    /// - `recurrence`: The recurrence of the subscription.
+    /// # Returns
+    /// - A new subscription.
+    /// # Examples
+    /// ```
+    /// use budget_manager::{Subscription, Recurrence};
+    /// use chrono::{Utc, NaiveDate};
+    ///
+    /// pub fn main() {
+    ///    let subscription = Subscription::new(
+    ///        String::from("My new subscription"),
+    ///        123,
+    ///        Recurrence::Month(1, 1)
+    ///    );
+    ///
+    ///    pritnln!("{:?}", subscription);
+    /// }
+    /// ```
     pub fn new(name: String, cost: f32, recurrence: Recurrence) -> Self {
         Self {
             uuid: Uuid::new_v4(),
@@ -58,28 +83,40 @@ impl Subscription {
         }
     }
 
+    /// Returns the uuid
     pub fn uuid(&self) -> Uuid {
         self.uuid
     }
 
+    /// Returns the name
     pub fn name(&self) -> &str {
         &self.name
     }
 
+    /// Returns the cost
     pub fn cost(&self) -> f32 {
         self.cost.0
     }
 
+    /// Returns the recurrence
     pub fn recurrence(&self) -> Recurrence {
         self.recurrence
     }
 
-    pub fn cost_until(&self, datetime: NaiveDate) -> f32 {
-        let times = times_until(self.recurrence, Utc::now().naive_utc().date(), datetime);
+    /// Calculates the cost from today until the given date.
+    /// # Arguments
+    /// - `to`: The date until the cost should be calculated.
+    /// # Returns
+    /// - The cost from today until the given date.
+    pub fn cost_until(&self, to: NaiveDate) -> f32 {
+        let times = times_until(self.recurrence, Utc::now().naive_utc().date(), to);
 
         self.cost.0 * times as f32
     }
 
+    /// Calculates the cost per year.
+    /// # Returns
+    /// - The cost per year.
     pub fn cost_per_year(&self) -> f32 {
         let times = match self.recurrence {
             Recurrence::Day(each_days) => 365 / each_days as u32,
@@ -90,6 +127,9 @@ impl Subscription {
         self.cost.0 * times as f32
     }
 
+    /// Calculates the cost per month.
+    /// # Returns
+    /// - The cost per month
     pub fn cost_per_month(&self) -> f32 {
         let times = match self.recurrence {
             Recurrence::Day(each_days) => 30 / each_days as u32,

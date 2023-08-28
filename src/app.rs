@@ -116,6 +116,9 @@ fn cost_to_year_end(subscriptions: Vec<Subscription>, expenses: Vec<FixedExpense
 }
 
 impl App {
+    /// Creates a new app instance with custom styles.
+    /// This is needed because we need to redefine text styles to use bigger fonts
+    /// Otherwise, it just returns `Self::default()`
     pub fn new(cc: &CreationContext) -> Self {
         // Get current context style
         let mut style = (*cc.egui_ctx.style()).clone();
@@ -140,6 +143,12 @@ impl App {
         Self::default()
     }
 
+    /// Saves the data to the config file. It uses the [`directories::ProjectDirs`](https://docs.rs/directories/latest/directories/struct.ProjectDirs.html) struct to find the config folder with:
+    /// - QUALIFIER: "com"
+    /// - ORGANIZATION: "margual56"
+    /// - APPLICATION: "NixBucks"
+    ///
+    /// And appends "config.json" to the path. Then, it overwrites the file with the serialized data.
     fn save_data(&self) {
         if let Some(dir) = ProjectDirs::from(QUALIFIER, ORGANIZATION, APPLICATION) {
             if !dir.config_dir().exists() {
@@ -152,6 +161,7 @@ impl App {
         }
     }
 
+    /// Updates the app by removing the expired subscriptions and incomes and adding the amounts to the "initial amount".
     fn update(&self) -> Self {
         let mut app = self.clone();
 
@@ -176,14 +186,21 @@ impl App {
         app.clone()
     }
 
+    /// Removes an expense.
+    /// # Arguments
+    /// - `uuid`: The UUID of the expense to remove.
     pub fn remove_expense(&mut self, uuid: Uuid) {
         self.fixed_expenses.remove(&uuid);
     }
 
+    /// Remove a punctual income.
+    /// # Arguments
+    /// - `uuid`: The UUID of the income to remove.
     pub fn remove_punctual_income(&mut self, uuid: &Uuid) {
         self.p_incomes.remove(uuid);
     }
 
+    /// Returns the total cost of all subscriptions in a whole year.
     #[allow(dead_code)]
     fn yearly_costs(&self) -> f32 {
         let mut amount = 0.0;
@@ -195,6 +212,7 @@ impl App {
         amount
     }
 
+    /// Returns the total cost of all subscriptions in a month.
     fn monthly_costs(&self) -> f32 {
         let mut amount = 0.0;
 
@@ -205,6 +223,7 @@ impl App {
         amount
     }
 
+    /// Returns the balance at the end of each month (all income streams - all subscriptions).
     fn monthly_balance(&self) -> f32 {
         let mut amount = 0.0;
 
@@ -219,6 +238,7 @@ impl App {
         amount
     }
 
+    /// Just draws the pop-up windows.
     fn draw_windows(&mut self, ctx: &egui::Context) {
         if let Some(win) = self.new_subscription_window.as_mut() {
             let mut show = true;
@@ -276,6 +296,11 @@ impl App {
         }
     }
 
+    /// Draws the subscriptions table.
+    /// # Arguments
+    /// - `ui`: The [`egui::Ui`](https://docs.rs/egui/0.12.2/egui/struct.Ui.html) to draw the table into.
+    /// # Returns
+    /// - `InnerResponse<()>`: The response of the table.
     fn subscriptions_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
             ui.heading(t!("app.title.subscriptions", self.lang));
@@ -358,6 +383,11 @@ impl App {
         })
     }
 
+    /// Draws the expenses table.
+    /// # Arguments
+    /// - `ui`: The [`egui::Ui`](https://docs.rs/egui/0.12.2/egui/struct.Ui.html) to draw the table into.
+    /// # Returns
+    /// - `InnerResponse<()>`: The response of the table.
     fn expenses_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
             ui.heading(t!("app.title.fixed_expenses", self.lang));
@@ -437,6 +467,11 @@ impl App {
         })
     }
 
+    /// Draws the results table, with the stats of the money.
+    /// # Arguments
+    /// - `ui`: The [`egui::Ui`](https://docs.rs/egui/0.12.2/egui/struct.Ui.html) to draw the table into.
+    /// # Returns
+    /// - `InnerResponse<()>`: The response of the table.
     fn results_table(&self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical(|ui| {
             ui.add_space(20.0);
@@ -618,6 +653,11 @@ impl App {
         })
     }
 
+    /// Draws the income table.
+    /// # Arguments
+    /// - `ui`: The [`egui::Ui`](https://docs.rs/egui/0.12.2/egui/struct.Ui.html) to draw the table into.
+    /// # Returns
+    /// - `InnerResponse<()>`: The response of the table.
     fn income_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
             ui.heading(t!("app.title.income_streams", self.lang));
@@ -700,6 +740,11 @@ impl App {
         })
     }
 
+    /// Draws the punctual income table.
+    /// # Arguments
+    /// - `ui`: The [`egui::Ui`](https://docs.rs/egui/0.12.2/egui/struct.Ui.html) to draw the table into.
+    /// # Returns
+    /// - `InnerResponse<()>`: The response of the table.
     fn punctual_income_table(&mut self, ui: &mut egui::Ui) -> InnerResponse<()> {
         ui.vertical_centered_justified(|ui| {
             ui.heading(t!("app.title.punctual_income", self.lang));
