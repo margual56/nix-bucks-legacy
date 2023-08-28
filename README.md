@@ -32,11 +32,12 @@ Remember that you can back up the config file, and also you can create copies to
 - Do statistics with the data
 
 ## Planned features
-- A complete overhaul of the UI: New colors, new layout, new design. I hired a professional designer to design this (please consider donating).
-- A small banner at the bottom that only shows up the second time that you open the program. Once you dismiss it, it won't show up again. It will ask the user to consider donating to the project.
-- An icon for the application.
-- A splash screen to organize profiles: save, copy, load, etc.
-- A refactor of the code: Cleanup, documentation and optimizations.
+-[x] Implement localization and translate to spanish
+-[ ] A complete overhaul of the UI: New colors, new layout, new design. I hired a professional designer to design this (please consider donating).
+-[ ] A small banner at the bottom that only shows up the second time that you open the program. Once you dismiss it, it won't show up again. It will ask the user to consider donating to the project.
+-[ ] An icon for the application.
+-[ ] A splash screen to organize profiles: save, copy, load, etc.
+-[ ] A refactor of the code: Cleanup, documentation and optimizations.
 
 # Help!
 If you know Rust and think you can help, please do! :)
