@@ -1,3 +1,5 @@
+[![Rust](https://github.com/margual56/nix-bucks/actions/workflows/rust.yml/badge.svg)](https://github.com/margual56/nix-bucks/actions/workflows/rust.yml)
+
 # NixBucks
 A simple budgeting app
 
