@@ -44,7 +44,6 @@ impl NewIncomeWindow {
                         ui.vertical(|ui| {
                             ui.label(t!("window.common.recurrence", lang));
 
-
                             egui::ComboBox::from_label(t!("window.common.pick", lang))
                                 .selected_text(self.tmp_subscription.recurrence.to_lang_str(lang))
                                 .show_ui(ui, |ui| {

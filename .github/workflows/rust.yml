@@ -30,7 +30,7 @@ jobs:
 
     stable-build:
         runs-on: ubuntu-latest
-
+        needs: fmt
         steps:
             - name: Install dependencies
               run: sudo apt-get update && sudo apt-get --assume-yes install libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libspeechd-dev libxkbcommon-dev libssl-dev librust-atk-dev libwebkit2gtk-4.0-dev libsoup2.4-dev
@@ -105,6 +105,7 @@ jobs:
 
     nightly-build:
         runs-on: ubuntu-latest
+        needs: fmt
         steps:
             - name: Install dependencies
               run: sudo apt-get update && sudo apt-get --assume-yes install libfontconfig1-dev libxcb-render0-dev libxcb-shape0-dev libxcb-xfixes0-dev libspeechd-dev libxkbcommon-dev libssl-dev librust-atk-dev libwebkit2gtk-4.0-dev libsoup2.4-dev
