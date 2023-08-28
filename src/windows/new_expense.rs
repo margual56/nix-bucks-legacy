@@ -29,7 +29,7 @@ impl NewExpenseWindow {
         lang: &str,
     ) -> Option<FixedExpense> {
         let mut subs: Option<FixedExpense> = None;
-        egui::Window::new("New fixed expense")
+        egui::Window::new(t!("window.f_expense.title", lang))
             .open(show)
             .auto_sized()
             .default_size([600.0, 200.0])
@@ -37,13 +37,13 @@ impl NewExpenseWindow {
                 ui.vertical_centered(|ui| {
                     ui.horizontal_centered(|ui| {
                         ui.vertical(|ui| {
-                            ui.label("Name (Concept)");
+                            ui.label(t!("window.common.concept", lang));
 
                             ui.text_edit_singleline(&mut self.name);
                         });
 
                         ui.vertical(|ui| {
-                            ui.label("Cost (€)");
+                            ui.label(t!("window.common.cost", lang));
 
                             ui.add(
                                 egui::DragValue::new(&mut self.cost)
@@ -55,14 +55,14 @@ impl NewExpenseWindow {
                         });
 
                         ui.vertical(|ui| {
-                            ui.label(t!("app.table.title.date", "en"));
+                            ui.label(t!("window.common.date", "en"));
 
                             ui.add(egui_extras::DatePickerButton::new(&mut self.date));
                         });
                     });
                     ui.separator();
 
-                    if ui.button("Add").clicked() {
+                    if ui.button(t!("window.common.add", lang)).clicked() {
                         subs = Some(FixedExpense::new(self.name.clone(), self.cost, self.date));
                     }
                 });

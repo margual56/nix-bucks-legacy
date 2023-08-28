@@ -11,6 +11,10 @@
         "en": "Recurrence",
         "es": "Recurrencia"
     },
+    "window.common.date": {
+        "en": "Date",
+        "es": "Fecha"
+    },
     "window.common.pick": {
         "en": "Pick a period",
         "es": "Elige un periodo"
