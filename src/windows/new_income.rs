@@ -1,4 +1,5 @@
 use eframe::egui;
+use internationalization::t;
 
 use crate::{SimpleRecurrence, Subscription, TmpSubscription};
 
@@ -8,23 +9,28 @@ pub struct NewIncomeWindow {
 }
 
 impl NewIncomeWindow {
-    pub fn show(&mut self, ctx: &egui::Context, show: &mut bool) -> Option<Subscription> {
+    pub fn show(
+        &mut self,
+        ctx: &egui::Context,
+        show: &mut bool,
+        lang: &str,
+    ) -> Option<Subscription> {
         let mut subs: Option<Subscription> = None;
-        egui::Window::new("New income source")
+        egui::Window::new(t!("window.income.title", lang))
             .open(show)
             .auto_sized()
-            .default_size(&[600.0, 200.0])
+            .default_size([600.0, 200.0])
             .show(ctx, |ui| {
                 ui.vertical_centered(|ui| {
                     ui.horizontal_centered(|ui| {
                         ui.vertical(|ui| {
-                            ui.label("Name (Concept)");
+                            ui.label(t!("window.common.concept", lang));
 
                             ui.text_edit_singleline(&mut self.tmp_subscription.name);
                         });
 
                         ui.vertical(|ui| {
-                            ui.label("Cost (€)");
+                            ui.label(t!("window.common.cost", lang));
 
                             ui.add(
                                 egui::DragValue::new(&mut self.tmp_subscription.cost)
@@ -36,27 +42,27 @@ impl NewIncomeWindow {
                         });
 
                         ui.vertical(|ui| {
-                            ui.label("Recurrence");
+                            ui.label(t!("window.common.recurrence", lang));
 
-                            egui::ComboBox::from_label("Take your pick")
-                                .selected_text(format!("{:?}", self.tmp_subscription.recurrence))
+                            egui::ComboBox::from_label(t!("window.common.pick", lang))
+                                .selected_text(self.tmp_subscription.recurrence.to_lang_str(lang))
                                 .show_ui(ui, |ui| {
                                     ui.style_mut().wrap = Some(false);
                                     ui.set_min_width(60.0);
                                     ui.selectable_value(
                                         &mut self.tmp_subscription.recurrence,
                                         SimpleRecurrence::Day,
-                                        "Daily",
+                                        t!("window.common.daily", lang),
                                     );
                                     ui.selectable_value(
                                         &mut self.tmp_subscription.recurrence,
                                         SimpleRecurrence::Month,
-                                        "Monthly",
+                                        t!("window.common.monthly", lang),
                                     );
                                     ui.selectable_value(
                                         &mut self.tmp_subscription.recurrence,
                                         SimpleRecurrence::Year,
-                                        "Yearly",
+                                        t!("window.common.yearly", lang),
                                     );
                                 });
 
@@ -68,8 +74,8 @@ impl NewIncomeWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=31)
-                                                .prefix("Every ")
-                                                .suffix(" days"),
+                                                .prefix(t!("window.common.every", lang))
+                                                .suffix(t!("window.common.days", lang)),
                                         );
                                     }
                                     SimpleRecurrence::Month => {
@@ -78,16 +84,16 @@ impl NewIncomeWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=31)
-                                                .prefix("The ")
-                                                .suffix(" of each month"),
+                                                .prefix(t!("window.common.the", lang))
+                                                .suffix(t!("window.common.each_month", lang)),
                                         );
                                         ui.add(
                                             egui::DragValue::new(&mut self.tmp_subscription.months)
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=12)
-                                                .prefix("Every ")
-                                                .suffix(" months"),
+                                                .prefix(t!("window.common.every", lang))
+                                                .suffix(t!("window.common.months", lang)),
                                         );
                                     }
                                     SimpleRecurrence::Year => {
@@ -99,7 +105,7 @@ impl NewIncomeWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=31)
-                                                .prefix("The "),
+                                                .prefix(t!("window.common.the", lang)),
                                             );
                                             ui.add(
                                                 egui::DragValue::new(
@@ -108,7 +114,7 @@ impl NewIncomeWindow {
                                                 .speed(1.0)
                                                 .max_decimals(0)
                                                 .clamp_range(1..=12)
-                                                .prefix(" of month "),
+                                                .prefix(t!("window.common.of_month", lang)),
                                             );
                                         });
                                         ui.add(
@@ -124,13 +130,13 @@ impl NewIncomeWindow {
                     });
                     ui.separator();
 
-                    if ui.button("Add").clicked() {
+                    if ui.button(t!("window.common.add", lang)).clicked() {
                         let sub: Subscription = self.tmp_subscription.clone().into();
                         subs = Some(sub);
                     }
                 });
             });
 
-        return subs;
+        subs
     }
 }

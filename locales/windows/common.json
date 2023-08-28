@@ -1,0 +1,66 @@
+{
+    "window.common.concept": {
+        "en": "Name (concept)",
+        "es": "Nombre (concepto)"
+    },
+    "window.common.cost": {
+        "en": "Cost (€)",
+        "es": "Coste (€)"
+    },
+    "window.common.recurrence": {
+        "en": "Recurrence",
+        "es": "Recurrencia"
+    },
+    "window.common.date": {
+        "en": "Date",
+        "es": "Fecha"
+    },
+    "window.common.pick": {
+        "en": "Pick a period",
+        "es": "Elige un periodo"
+    },
+    "window.common.daily": {
+        "en": "Daily",
+        "es": "Diario"
+    },
+    "window.common.monthly": {
+        "en": "Monthly",
+        "es": "Mensual"
+    },
+    "window.common.yearly": {
+        "en": "Yearly",
+        "es": "Anual"
+    },
+    "window.common.every": {
+        "en": "Every ",
+        "es": "Cada "
+    },
+    "window.common.days": {
+        "en": " days",
+        "es": " días"
+    },
+    "window.common.months": {
+        "en": " months",
+        "es": " meses"
+    },
+    "window.common.years": {
+        "en": " years",
+        "es": " años"
+    },
+    "window.common.the": {
+        "en": "The ",
+        "es": "El "
+    },
+    "window.common.each_month": {
+        "en": " of each month",
+        "es": " de cada mes"
+    },
+    "window.common.of_month": {
+        "en": " of month ",
+        "es": " del mes "
+    },
+    "window.common.add": {
+        "en": "Add",
+        "es": "Agregar"
+    }
+}

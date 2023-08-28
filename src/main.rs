@@ -11,5 +11,5 @@ fn main() {
         ..Default::default()
     };
 
-    eframe::run_native("NixBucks", options, Box::new(|_cc| Box::<App>::default())).unwrap();
+    eframe::run_native("NixBucks", options, Box::new(|cc| Box::new(App::new(cc)))).unwrap();
 }

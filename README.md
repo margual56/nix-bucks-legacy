@@ -1,3 +1,5 @@
+[![Rust](https://github.com/margual56/nix-bucks/actions/workflows/rust.yml/badge.svg)](https://github.com/margual56/nix-bucks/actions/workflows/rust.yml)
+
 # NixBucks
 A simple budgeting app
 
@@ -31,12 +33,12 @@ Remember that you can back up the config file, and also you can create copies to
 - Do statistics with the data
 
 ## Planned features
-- Translation to Spanish (if you know more languages, please feel free to contribute)!
-- A complete overhaul of the UI: New colors, new layout, new design. I hired a professional designer to design this (please consider donating).
-- A small banner at the bottom that only shows up the second time that you open the program. Once you dismiss it, it won't show up again. It will ask the user to consider donating to the project.
-- An icon for the application.
-- A splash screen to organize profiles: save, copy, load, etc.
-- A refactor of the code: Cleanup, documentation and optimizations.
+- [x] Translation to Spanish (if you know more languages, please feel free to contribute)!
+- [ ] A complete overhaul of the UI: New colors, new layout, new design. I hired a professional designer to design this (please consider donating).
+- [ ] A small banner at the bottom that only shows up the second time that you open the program. Once you dismiss it, it won't show up again. It will ask the user to consider donating to the project.
+- [ ] An icon for the application.
+- [ ] A splash screen to organize profiles: save, copy, load, etc.
+- [ ] A refactor of the code: Cleanup, documentation and optimizations.
 
 # Help!
 If you know Rust and think you can help, please do! :)
