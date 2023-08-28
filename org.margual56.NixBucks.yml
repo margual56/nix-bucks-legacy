@@ -1,0 +1,19 @@
+app-id: org.margual56.NixBucks
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: nix-bucks
+modules:
+  - name: nix-bucks
+    buildsystem: simple
+    build-commands:
+      - install -D nix-bucks /app/bin/nix-bucks
+    sources:
+      - type: file
+        path: nix-bucks
+finish-args:
+  # Wayland access
+  - --socket=wayland
+  - --socket=fallback-x11
+  # Needs to save files locally
+  - --filesystem=xdg-config
