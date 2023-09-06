@@ -13,6 +13,7 @@ readme = "README.md"
 [dependencies]
 cached = "^0.44"
 chrono = { version = "^0.4", features = ["serde"] }
+colorsys = "0.6.7"
 directories = "^5.0"
 eframe = { version = "^0.22", features = ["wayland", "wgpu"] }
 egui_extras = { version = "^0.22", features = ["datepicker"] }

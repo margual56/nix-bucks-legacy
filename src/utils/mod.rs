@@ -1,10 +1,12 @@
 mod fixed_expense;
 mod recurrence;
 mod subscription;
+mod color;
 
 pub use fixed_expense::FixedExpense;
 pub use recurrence::{times_until, Recurrence, SimpleRecurrence};
 pub use subscription::{Subscription, TmpSubscription};
+pub use color::ColorHex;
 
 mod tests {
     use chrono::NaiveDate;
